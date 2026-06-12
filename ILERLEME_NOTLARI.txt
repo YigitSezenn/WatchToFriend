@@ -1,0 +1,217 @@
+==========================================================
+  WatchToFriend - İLERLEME NOTLARI
+  Son güncelleme: 2026-05-29
+==========================================================
+
+# PROJE NEDİR
+Arkadaşlarla birlikte (senkronize) video/film izleme Android uygulaması.
+- Dil/Stack: Kotlin + Jetpack Compose + Firebase
+- Paket adı: com.watch.watchtofriend
+- Min SDK 24, Target SDK 36
+- Proje yolu: D:\MobilUygulamaProjeleri\WatchToFriend
+
+# KULLANICI TERCİHLERİ (sorulup karar verildi)
+- Video kaynağı: YouTube + film sitesi linkleri
+- Oda sistemi: Hem oda kodu HEM arkadaş listesi
+- İzlerken: Canlı metin sohbet
+- Giriş: E-posta/şifre + Google ile giriş
+
+==========================================================
+# TAMAMLANAN ÖZELLİKLER
+==========================================================
+1. KİMLİK DOĞRULAMA
+   - E-posta/şifre kayıt + giriş (çalışıyor)
+   - Google ile giriş (kod hazır, cihazda çalışması için SHA-1 gerekli - AŞAĞIYA BAK)
+
+2. ANA EKRAN (HomeScreen)
+   - "Odalar" ve "Arkadaşlar" sekmeleri
+   - Oda Oluştur (+) ve Katıl FAB butonları
+   - Arkadaş ekleme (e-posta ile arama)
+   - Oda silme (sadece host, kırmızı çöp ikonu + onay dialogu)
+
+3. ODA SİSTEMİ
+   - Oda oluştur -> 6 haneli kod üretilir
+   - Koda göre katıl
+   - Firestore'da /rooms/{kod} olarak saklanır
+
+4. İZLEME ODASI (WatchRoomScreen)
+   - Üst yarı: Video (WebView)
+   - Alt yarı: Canlı sohbet
+   - Sağ üst ⋮ menü: "Arkadaş Davet Et", "Odayı Sil"(host) / "Odadan Ayrıl"(misafir)
+   - "Kodu Kopyala" butonu
+   - Video senkronizasyonu: host play/pause -> Firestore -> misafirler JS ile senkron
+
+==========================================================
+# 2026-05-29 OTURUMU (EMÜLATÖR TESTİ + BUG FIX + TEST CASE)
+==========================================================
+- *** YOUTUBE "Error code: 152" DÜZELTİLDİ ***
+  Sorun: Tüm YouTube videoları (test linki + bilinen embed-açık video bile)
+         "This video is unavailable. Error code: 152" veriyordu.
+  Neden: IFrame Player'a base URL olarak "https://www.youtube.com" veriliyordu.
+         Oynatıcı kendini youtube.com üzerinde gömülü sanıyor -> YouTube reddediyor.
+  Çözüm (WatchRoomScreen.kt):
+    - loadDataWithBaseURL base -> "https://watchtofriend.app"
+    - playerVars'a: 'enablejsapi':1, 'origin':'https://watchtofriend.app'
+    - YT.Player'a: host:'https://www.youtube-nocookie.com'
+  Sonuç: Video sorunsuz oynuyor (emülatörde doğrulandı).
+- Emülatörde uçtan uca test yapıldı (PASS):
+  kayıt ol -> oda oluştur (YouTube) -> video oynadı
+  oda oluştur (fullhdfilmizlesene.life) -> site WebView'da açıldı, pop-up YOK
+  chat -> mesaj gönderildi, balon göründü
+- YENİ DOSYALAR:
+  - TEST_CASELERI.txt (repo kökü): tüm uygulama için manuel test case'leri
+  - app/src/androidTest/java/com/watch/watchtofriend/LoginScreenTest.kt
+    (3 otomatik Compose UI testi -> connectedDebugAndroidTest ile 4/4 PASS)
+- İKİ EMÜLATÖRLE TEST EDİLDİ (5554=Ahmet host, 5556=Mehmet misafir, oda QU4RXE):
+  - TC-2.4 odaya katıl -> PASS (Mehmet katıldı, 2 üye)
+  - TC-5.2 iki yönlü chat -> PASS (her iki cihazda gerçek zamanlı, doğru hizada)
+  - TC-6.3 video sync (host->misafir) -> PASS (host 2:27'de oynatınca misafir
+    0:00'dan host pozisyonuna seek etti, senkron oynadı; seek ~birkaç sn toleranslı)
+  NOT: İki emülatör host ağını zorluyor (paket kaybı) -> airplane-mode toggle ile
+  sıfırlanıyor (cmd connectivity airplane-mode enable/disable).
+- HALA KALAN (iki cihaz): TC-4.1 odaya davet, TC-7.2 odadan ayrıl (⋮ menü tap'i
+  emülatörde zor oturdu, kodu hazır - manuel doğrulama yapılabilir).
+
+==========================================================
+# BU OTURUMDA YAPILAN SON DEĞİŞİKLİKLER (önceki oturum)
+==========================================================
+- Google Sign-In eklendi (AuthRepository, AuthViewModel, LoginScreen)
+- Web client ID strings.xml'e eklendi:
+  23845201969-9m9q0lc89qvm4u1n47or9l9j3trn08n9.apps.googleusercontent.com
+- Arkadaşı odaya davet etme eklendi (WatchRoomScreen ⋮ menü -> InviteFriendDialog)
+- Oda silme (host) / odadan ayrılma (misafir) eklendi
+- Chat UI iyileştirildi (WhatsApp tarzı balonlar)
+- *** YOUTUBE OYNATMA DÜZELTMESİ ***
+  Eski yöntem: youtube.com/embed/ URL'sini doğrudan loadUrl ile açıyordu -> OYNATMIYORDU
+  Yeni yöntem: YouTube IFrame Player API'yi loadDataWithBaseURL("https://www.youtube.com", html)
+  ile HTML olarak yüklüyor. Origin doğru ayarlandığı için oynatma çalışmalı.
+  + User-agent Chrome olarak değiştirildi.
+  Fonksiyonlar: buildYouTubeHtml(), extractYouTubeId(), buildVideoInjectionScript()
+
+==========================================================
+# !!! KALDIĞIM YER / DEVAM EDİLECEK TEST !!!
+==========================================================
+Kullanıcı istedi: "0'dan kayıt ol, oda oluştur, test kullanıcısı oluştur, davet et,
+chat'i test et, video linkini test et" — emülatörde uçtan uca test.
+
+DURUM:
+- Uygulama emülatöre kuruldu (installDebug başarılı)
+- Emülatörde ZATEN giriş yapılmış bir hesap + "XDXNJR" odası var
+  (videoUrl = https://www.youtube.com/watch?v=itWxTkfjyJ0)
+- IFrame API düzeltmesinden SONRA odaya girip video oynatmayı doğrulamak üzereydim
+- "Odaya gir + screenshot s2.png" komutu çalıştı AMA sonucu görmeden kullanıcı durdurdu
+
+YAPILACAKLAR (sıradaki adımlar):
+1. s2.png'yi kontrol et -> YouTube videosu IFrame API ile oynuyor mu? (ASIL TEST BU)
+2. Eğer oynamıyorsa: WebView debug (chrome://inspect veya WebView console logları),
+   IFrame API'nin yüklenip yüklenmediğine bak. mediaPlaybackRequiresUserGesture=false zaten ayarlı.
+3. Uçtan uca akış:
+   a. Çıkış yap -> 0'dan kayıt ol (test e-postası)
+   b. Oda oluştur (YouTube linki ile)
+   c. İKİNCİ test kullanıcısı oluştur (çıkış yapıp tekrar kayıt, ya da ikinci emülatör)
+   d. Birinci kullanıcıdan ikinciyi arkadaş ekle + odaya davet et
+   e. Chat'i iki yönlü test et
+   f. Video senkronizasyonunu test et (host oynat/durdur -> misafir senkron mu)
+
+==========================================================
+# TEST ORTAMI / KOMUTLAR (ÖNEMLİ)
+==========================================================
+- ADB yolu: C:\Users\yigit\AppData\Local\Android\Sdk\platform-tools\adb.exe
+- Emülatör: emulator-5554 (sdk_gphone16k_x86_64)
+- !!! ADB komutları için PowerShell tool kullan, Bash DEĞİL !!!
+  (Git Bash, /sdcard/ yolunu C:/Program Files/Git/sdcard/ diye bozuyor)
+
+- Build + kur:
+  cd "D:\MobilUygulamaProjeleri\WatchToFriend"; ./gradlew installDebug --no-daemon
+
+- Uygulamayı başlat:
+  adb shell am start -n com.watch.watchtofriend/.MainActivity
+
+- Ekran görüntüsü (PowerShell):
+  & $adb shell screencap -p /sdcard/s.png
+  & $adb pull /sdcard/s.png "D:\MobilUygulamaProjeleri\WatchToFriend\s.png"
+
+- Dokunma / yazma:
+  adb shell input tap <x> <y>
+  adb shell input text "metin"
+  NOT: Screenshot 1280x2856 orijinal çözünürlük. Read tool 896x2000 gösteriyor,
+  tap için görüntü koordinatını 1.43 ile çarp.
+
+==========================================================
+# FIREBASE DURUMU
+==========================================================
+- Proje: watchtofriend (project number 23845201969)
+- Firestore: ETKİN (test mode, konum europe-west1)
+- Email/Password: ETKİN
+- Google Sign-In: Console'da ETKİN, web client ID eklendi
+
+- !!! YAPILMASI GEREKEN (Google girişi cihazda çalışsın diye) !!!
+  Debug SHA-1 parmak izi Firebase'e eklenmeli:
+  1. ./gradlew signingReport -> Debug SHA1'i kopyala
+  2. Firebase Console -> Project Settings -> Android app -> Add fingerprint
+  3. Yeni google-services.json indir -> app/ klasörüne koy
+  (Bu yapılmazsa Google butonu "sign in failed" verir; e-posta/şifre etkilenmez)
+
+- ÖNERİLEN FIRESTORE GÜVENLİK KURALLARI (yayın öncesi, henüz uygulanmadı):
+  rules_version = '2';
+  service cloud.firestore {
+    match /databases/{database}/documents {
+      match /users/{uid} {
+        allow read, write: if request.auth.uid == uid;
+        allow read: if request.auth != null;
+      }
+      match /rooms/{roomId} {
+        allow read, write: if request.auth != null;
+        match /messages/{msgId} {
+          allow read, write: if request.auth != null;
+        }
+      }
+      match /requests/{reqId} {
+        allow read, write: if request.auth != null;
+      }
+    }
+  }
+
+==========================================================
+# DOSYA HARİTASI
+==========================================================
+app/src/main/java/com/watch/watchtofriend/
+  MainActivity.kt                 - NavHost (login/home/create/join/watch)
+  navigation/AppNavigation.kt     - Screen route'ları
+  data/model/                     - User.kt, Room.kt, Message.kt
+  data/repository/
+    AuthRepository.kt             - login/register/google/logout
+    RoomRepository.kt             - oda CRUD, mesaj, arkadaş, davet, sil, ayrıl
+  ui/auth/                        - LoginScreen.kt, AuthViewModel.kt
+  ui/home/                        - HomeScreen.kt, HomeViewModel.kt
+  ui/room/                        - CreateRoomScreen.kt, JoinRoomScreen.kt
+  ui/watch/                       - WatchRoomScreen.kt, WatchViewModel.kt
+
+app/src/main/res/values/strings.xml  - google_web_client_id burada
+app/src/main/AndroidManifest.xml     - INTERNET izni + usesCleartextTraffic
+app/build.gradle.kts                 - firebase-auth/firestore, play-services-auth,
+                                       navigation, coroutines, material-icons
+
+==========================================================
+# VERİ MODELİ (Firestore)
+==========================================================
+/users/{uid}        -> displayName, email, friendIds[]
+/rooms/{roomId}     -> hostUid, videoUrl, isPlaying, currentPositionMs,
+                       updatedAt, memberUids[]
+/rooms/{roomId}/messages/{msgId} -> senderUid, senderName, text, timestamp
+/requests/{reqId}   -> fromUid, fromName, toUid, type("friend"/"room"),
+                       roomId(room daveti için), timestamp
+
+==========================================================
+# İSTEK / DAVET SİSTEMİ (kabul/red akışı)
+==========================================================
+- Arkadaş ekleme ARTIK doğrudan eklemiyor; arkadaşlık İSTEĞİ gönderiyor.
+  Karşı kullanıcı Arkadaşlar sekmesinde "Gelen İstekler"de görür, kabul/red eder.
+  Kabul -> çift yönlü arkadaşlık (her iki kullanıcının friendIds'ine eklenir).
+- Odaya davet ARTIK doğrudan eklemiyor; oda daveti İSTEĞİ gönderiyor.
+  Davet edilen kullanıcı kabul edince odanın memberUids'ine eklenir.
+- Red -> istek dokümanı silinir, hiçbir şey yapılmaz.
+- Arkadaşlar sekmesinde bekleyen istek sayısı rozet (Badge) olarak gösterilir.
+- Kod: data/model/Request.kt, RoomRepository (sendFriendRequest, sendRoomInvite,
+  observeRequests, acceptRequest, rejectRequest), HomeViewModel/HomeScreen
+  (FriendsTab + RequestItem), WatchViewModel.inviteFriend -> sendRoomInvite.

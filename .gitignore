@@ -1,0 +1,47 @@
+# Gradle / Android build
+.gradle/
+**/build/
+local.properties
+/captures
+.externalNativeBuild
+.cxx
+
+# IDE
+*.iml
+.idea/
+.DS_Store
+
+# Release artifacts
+*.apk
+*.aab
+*.ap_
+*.dex
+
+# Signing (asla commit etme)
+keystore.properties
+*.jks
+*.keystore
+
+# Firebase client config — kendi Firebase projenizden indirin
+app/google-services.json
+
+# Debug / geçici dosyalar (proje kökü)
+/b*.png
+/c*.png
+/s*.png
+/sc*.png
+/m*.png
+/x*.png
+/ss*.png
+/bu*.xml
+/cu*.xml
+/ui*.xml
+/mu*.xml
+/xu*.xml
+lc.txt
+.claude/
+key/
+
+# OS
+Thumbs.db
+Desktop.ini

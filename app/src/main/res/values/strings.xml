@@ -1,0 +1,444 @@
+<resources>
+    <string name="app_name">Watch with Friends</string>
+    <string name="google_web_client_id">23845201969-9m9q0lc89qvm4u1n47or9l9j3trn08n9.apps.googleusercontent.com</string>
+
+    <!-- Auth -->
+    <string name="auth_subtitle_login">Arkadaşlarınla birlikte izle</string>
+    <string name="auth_subtitle_register">Hesabını oluştur, izlemeye başla</string>
+    <string name="auth_email">E-posta</string>
+    <string name="auth_password">Şifre</string>
+    <string name="auth_display_name">Kullanıcı Adı</string>
+    <string name="auth_forgot_password">Şifremi unuttum?</string>
+    <string name="auth_login">Giriş Yap</string>
+    <string name="auth_register">Kayıt Ol</string>
+    <string name="auth_or">veya</string>
+    <string name="auth_google">Google ile Devam Et</string>
+    <string name="auth_toggle_login">Zaten hesabım var · Giriş yap</string>
+    <string name="auth_toggle_register">Hesabın yok mu? · Hesap oluştur</string>
+    <string name="auth_show_password">Şifreyi göster</string>
+    <string name="auth_hide_password">Şifreyi gizle</string>
+
+    <!-- Tabs -->
+    <string name="tab_rooms">Odalarım</string>
+    <string name="tab_friends">Arkadaşlar</string>
+    <string name="tab_discover">Keşfet</string>
+    <string name="tab_messages">Mesajlar</string>
+
+    <!-- Profile -->
+    <string name="profile_title">Profilim</string>
+    <string name="profile_pick_photo">Profil fotoğrafı seç</string>
+    <string name="profile_remove_photo">Profil fotoğrafını kaldır</string>
+    <string name="profile_removing">Kaldırılıyor…</string>
+    <string name="profile_display_name">Görünen ad</string>
+    <string name="profile_friend_id">Arkadaş ID\'in</string>
+    <string name="profile_copy">Kopyala</string>
+    <string name="profile_id_copied">ID kopyalandı</string>
+    <string name="profile_version">Uygulama sürümü v%1$s</string>
+    <string name="profile_theme">Tema</string>
+    <string name="theme_system">Sistem</string>
+    <string name="theme_light">Açık</string>
+    <string name="theme_dark">Koyu</string>
+    <string name="profile_language">Dil</string>
+    <string name="lang_system">Sistem</string>
+    <string name="lang_turkish">Türkçe</string>
+    <string name="lang_english">English</string>
+    <string name="profile_replay_tour">Turu tekrar göster</string>
+    <string name="profile_help">Yardım ve SSS</string>
+    <string name="profile_rate">Uygulamayı değerlendir</string>
+    <string name="profile_history">İzleme Geçmişi</string>
+    <string name="profile_clear_history">Tümünü Sil</string>
+    <string name="profile_blocked">Engellenenler</string>
+    <string name="profile_unblock">Engeli Kaldır</string>
+    <string name="profile_save">Kaydet</string>
+    <string name="profile_close">Kapat</string>
+    <string name="profile_wait">Lütfen bekleyin…</string>
+
+    <!-- Tour -->
+    <string name="tour_skip">Atla</string>
+    <string name="tour_next">İleri</string>
+    <string name="tour_start">Başla</string>
+    <string name="tour_1_title">WatchToFriend\'a hoş geldin</string>
+    <string name="tour_1_body">Arkadaşlarınla aynı anda video izle, sohbet et ve ses kanalında konuş.</string>
+    <string name="tour_2_title">Alt menü</string>
+    <string name="tour_2_body">Odalarım, Keşfet, Arkadaşlar ve özel mesajlar burada.</string>
+    <string name="tour_3_title">Odaya katıl</string>
+    <string name="tour_3_body">Yeni oda oluştur veya davet linki / 6 haneli kod ile katıl.</string>
+    <string name="tour_4_title">İzlerken</string>
+    <string name="tour_4_body">Video senkron kalır; ses kanalı, sohbet, emoji tepkileri ve ekran paylaşımı kullanabilirsin.</string>
+
+    <!-- Help -->
+    <string name="help_title">Yardım ve SSS</string>
+    <string name="help_close">Kapat</string>
+    <string name="help_q1">Nasıl oda oluştururum?</string>
+    <string name="help_a1">Ana ekranda + ile yeni oda açın, video linki ekleyin ve arkadaşlarınıza davet kodu veya link gönderin.</string>
+    <string name="help_q2">Video senkronu nasıl çalışır?</string>
+    <string name="help_a2">Oda sahibi veya yetkililer oynat/durdur yaptığında tüm üyelerde video aynı anda güncellenir.</string>
+    <string name="help_q3">Sesli sohbet nasıl açılır?</string>
+    <string name="help_a3">İzleme odasında mikrofon simgesine dokunun. Kulaklık kullanmak echo riskini azaltır.</string>
+    <string name="help_q4">Ekran paylaşımı</string>
+    <string name="help_a4">Oda içinde ekran paylaş simgesine basın ve izin verin. İzleyenler paylaşılan ekranı canlı görür.</string>
+    <string name="help_q5">Dil nasıl değiştirilir?</string>
+    <string name="help_a5">Profil → Dil bölümünden Türkçe, English veya Sistem dilini seçin.</string>
+    <string name="help_q6">Destek</string>
+    <string name="help_a6">Sorun yaşarsanız uygulamayı güncelleyin ve internet bağlantınızı kontrol edin. Geri bildirim için mağaza yorumu bırakabilirsiniz.</string>
+
+    <!-- Rating -->
+    <string name="rating_thanks">Teşekkürler!</string>
+    <string name="rating_unavailable">Değerlendirme şu an kullanılamıyor</string>
+
+    <!-- Common -->
+    <string name="common_back">Geri</string>
+    <string name="common_cancel">İptal</string>
+    <string name="common_save">Kaydet</string>
+    <string name="common_close">Kapat</string>
+    <string name="common_delete">Sil</string>
+    <string name="common_copy">Kopyala</string>
+    <string name="common_join">Katıl</string>
+    <string name="common_enter">Gir</string>
+    <string name="common_paste">Yapıştır</string>
+    <string name="common_send">Gönder</string>
+    <string name="common_show">Göster</string>
+    <string name="common_clear">Temizle</string>
+    <string name="common_search">Ara</string>
+    <string name="common_start">Başlat</string>
+    <string name="common_user">Kullanıcı</string>
+    <string name="common_unknown_user">Bilinmeyen Kullanıcı</string>
+    <string name="common_some_user">Bir kullanıcı</string>
+    <string name="common_host">HOST</string>
+    <string name="common_moderator">YETKİLİ</string>
+    <string name="common_you_suffix"> (sen)</string>
+    <string name="common_today">Bugün</string>
+    <string name="common_yesterday">Dün</string>
+    <string name="common_logout">Çıkış</string>
+    <string name="common_admin">Admin</string>
+    <string name="common_locked">Şifreli</string>
+    <string name="common_accept">Kabul Et</string>
+    <string name="common_reject">Reddet</string>
+    <string name="common_invite">Davet Et</string>
+    <string name="common_pin">Sabitle</string>
+    <string name="common_unpin">Sabiti Kaldır</string>
+    <string name="common_options">Seçenekler</string>
+    <string name="common_menu">Menü</string>
+    <string name="common_play">Oynat</string>
+    <string name="common_pause">Durdur</string>
+    <string name="common_password">Şifre</string>
+    <string name="common_online">Çevrimiçi</string>
+    <string name="common_offline_banner">İnternet bağlantısı yok — Firestore senkronu durdu</string>
+    <string name="common_loading">Yükleniyor…</string>
+    <string name="common_unknown_error">bilinmeyen hata</string>
+
+    <!-- Splash -->
+    <string name="splash_tagline">Arkadaşlarınla birlikte izle</string>
+
+    <!-- Auth errors -->
+    <string name="auth_err_credentials_required">Lütfen e-posta ve şifrenizi girin.</string>
+    <string name="auth_err_name_required">Lütfen bir kullanıcı adı girin.</string>
+    <string name="auth_err_email_required">Lütfen e-posta adresinizi girin.</string>
+    <string name="auth_err_password_min">Şifre en az 6 karakter olmalı.</string>
+    <string name="auth_err_reset_email">Sıfırlama için geçerli bir e-posta girin.</string>
+    <string name="auth_info_reset_sent">Şifre sıfırlama bağlantısı e-postanıza gönderildi.</string>
+    <string name="auth_err_weak_password">Şifre çok zayıf. En az 6 karakter girin.</string>
+    <string name="auth_err_user_not_found">Bu e-posta ile kayıtlı bir hesap bulunamadı.</string>
+    <string name="auth_err_email_in_use">Bu e-posta zaten kayıtlı. Giriş yapmayı deneyin.</string>
+    <string name="auth_err_invalid_email">Geçersiz e-posta adresi.</string>
+    <string name="auth_err_wrong_password">E-posta veya şifre hatalı.</string>
+    <string name="auth_err_network">İnternet bağlantısı yok. Bağlantınızı kontrol edip tekrar deneyin.</string>
+    <string name="auth_err_too_many">Çok fazla deneme yapıldı. Lütfen biraz sonra tekrar deneyin.</string>
+    <string name="auth_err_generic">Bir hata oluştu. Lütfen tekrar deneyin.</string>
+    <string name="auth_google_cancelled">Google girişi iptal edildi.</string>
+    <string name="auth_google_network">Ağ hatası. İnternetinizi kontrol edin.</string>
+    <string name="auth_google_config">Google girişi yapılandırma hatası (SHA-1 eksik). E-posta ile girebilirsiniz.</string>
+    <string name="auth_google_config_missing">Google girişi yapılandırması eksik (SHA-1 / web client ID). E-posta ile girebilirsiniz.</string>
+    <string name="auth_google_failed">Google girişi başarısız (kod %1$d). E-posta ile girebilirsiniz.</string>
+    <string name="auth_google_incomplete">Google girişi tamamlanmadı. Cihazda Google hesabı ve Play Servisleri gerekir; e-posta ile de girebilirsiniz.</string>
+
+    <!-- Home -->
+    <string name="home_fab_join">Katıl</string>
+    <string name="home_fab_create">Oda Oluştur</string>
+    <string name="home_fab_add_friend">Arkadaş Ekle</string>
+    <string name="home_delete_room_title">Odayı Sil</string>
+    <string name="home_delete_room_body">\"%1$s\" odasını silmek istediğinize emin misiniz? Bu işlem geri alınamaz.</string>
+    <string name="home_add_friend_title">Arkadaş Ekle</string>
+    <string name="home_your_id">Senin ID\'in: #%1$s</string>
+    <string name="home_friend_search_hint">Kullanıcı ID\'si veya e-posta</string>
+    <string name="home_friend_search_placeholder">örn. ABC123</string>
+    <string name="home_send_friend_request">Arkadaşlık İsteği Gönder</string>
+    <string name="home_pick_photo">Fotoğraf seç</string>
+    <string name="home_history_meta">%1$s · %2$d kişi</string>
+    <string name="home_empty_rooms_title">Henüz odanız yok</string>
+    <string name="home_empty_rooms_sub">Bir oda oluşturun ya da arkadaşınızın kodu ile katılın.</string>
+    <string name="home_empty_discover_title">Açık oda yok</string>
+    <string name="home_empty_discover_sub">Şu an herkese açık oda bulunmuyor. Oda oluştururken Herkese açık seçebilirsin.</string>
+    <string name="home_viewers">%1$d izleyici</string>
+    <string name="home_room_default">Oda %1$s</string>
+    <string name="home_password_room_title">Şifreli Oda</string>
+    <string name="home_password_room_body">\"%1$s\" odasına katılmak için şifre gerekiyor.</string>
+    <string name="home_incoming_requests">Gelen İstekler</string>
+    <string name="home_friends_section">Arkadaşlar</string>
+    <string name="home_empty_friends_title">Henüz arkadaşınız yok</string>
+    <string name="home_empty_friends_sub">Arkadaş eklemek için Arkadaş Ekle düğmesine dokunun.</string>
+    <string name="home_remove_friend_title">Arkadaşı Sil</string>
+    <string name="home_remove_friend_body">\"%1$s\" arkadaş listenizden çıkarılsın mı?</string>
+    <string name="home_send_message">Mesaj Gönder</string>
+    <string name="home_remove_friend">Arkadaşı Sil</string>
+    <string name="home_request_room_invite">Sizi \"%1$s\" odasına davet etti</string>
+    <string name="home_request_friend">Arkadaşlık isteği gönderdi</string>
+    <string name="home_empty_dm_title">Henüz mesajınız yok</string>
+    <string name="home_empty_dm_sub">Arkadaş listenizden birine mesaj gönderin.</string>
+    <string name="home_dm_start">Mesaj başlat</string>
+    <string name="home_no_messages_yet">Henüz mesaj yok</string>
+    <string name="home_photo_too_large">Fotoğraf çok büyük veya okunamadı. Daha küçük bir görsel deneyin.</string>
+
+    <!-- Home VM toasts -->
+    <string name="toast_unblock_failed">Engel kaldırılamadı, tekrar deneyin</string>
+    <string name="toast_photo_updated">Profil fotoğrafı güncellendi</string>
+    <string name="toast_photo_too_large">Fotoğraf çok büyük. Daha küçük bir görsel seçin.</string>
+    <string name="toast_photo_update_failed">Fotoğraf güncellenemedi, bağlantınızı kontrol edin</string>
+    <string name="toast_photo_removed">Profil fotoğrafı kaldırıldı</string>
+    <string name="toast_photo_remove_failed">Fotoğraf kaldırılamadı, bağlantınızı kontrol edin</string>
+    <string name="toast_name_updated">İsim güncellendi</string>
+    <string name="toast_name_update_failed">İsim güncellenemedi, bağlantınızı kontrol edin</string>
+    <string name="toast_dm_open_failed">Sohbet açılamadı, bağlantınızı kontrol edin</string>
+    <string name="toast_room_not_found">Oda bulunamadı</string>
+    <string name="toast_wrong_password">Yanlış şifre</string>
+    <string name="toast_room_full">Oda dolu</string>
+    <string name="toast_join_failed">Odaya katılınamadı, bağlantınızı kontrol edin</string>
+    <string name="toast_user_not_found">Kullanıcı bulunamadı</string>
+    <string name="toast_cannot_add_self">Kendinizi ekleyemezsiniz</string>
+    <string name="toast_search_failed">İnternet bağlantısı yok ya da arama başarısız</string>
+    <string name="toast_friend_request_sent">Arkadaşlık isteği gönderildi</string>
+    <string name="toast_friend_request_already">Bu kullanıcıya zaten istek gönderdiniz</string>
+    <string name="toast_request_send_failed">İstek gönderilemedi: %1$s</string>
+    <string name="toast_accept_failed">İstek kabul edilemedi, tekrar deneyin</string>
+    <string name="toast_reject_failed">İstek reddedilemedi, tekrar deneyin</string>
+    <string name="toast_delete_room_failed">Oda silinemedi, tekrar deneyin</string>
+    <string name="toast_remove_friend_failed">Arkadaş kaldırılamadı, tekrar deneyin</string>
+
+    <!-- Join room -->
+    <string name="join_title">Odaya Katıl</string>
+    <string name="join_heading">Odaya katıl</string>
+    <string name="join_hint_code">Arkadaşınızın paylaştığı 6 haneli kodu girin.</string>
+    <string name="join_hint_invite">Davet linkinden geldin — katılmak için onayla.</string>
+    <string name="join_code_label">Oda Kodu veya davet linki</string>
+    <string name="join_password_label">Oda şifresi</string>
+    <string name="join_err_not_found">Oda bulunamadı. Kodu kontrol edin.</string>
+    <string name="join_err_wrong_password">Şifre hatalı.</string>
+    <string name="join_err_full">Oda dolu.</string>
+    <string name="join_err_network">İnternet bağlantısı yok. Lütfen tekrar deneyin.</string>
+
+    <!-- Create room -->
+    <string name="room_create_title">Oda Oluştur</string>
+    <string name="room_create_heading">Yeni oda aç</string>
+    <string name="room_create_sub">İzlemek istediğiniz YouTube veya video sitesi bağlantısını yapıştırın.</string>
+    <string name="room_templates">Şablonlar</string>
+    <string name="room_name_hint">Oda adı (isteğe bağlı)</string>
+    <string name="room_name_placeholder">örn. Film Gecesi</string>
+    <string name="room_video_hint">Video bağlantısı (isteğe bağlı)</string>
+    <string name="room_video_placeholder">Boş bırakıp odada da ekleyebilirsin</string>
+    <string name="room_schedule">Oda Zamanlama</string>
+    <string name="room_schedule_now">Hemen başlat</string>
+    <string name="room_schedule_past">⚠ Geçmiş tarih seçildi</string>
+    <string name="room_public">Herkese açık oda</string>
+    <string name="room_public_hint">Keşfet sekmesinde herkes görebilir/katılabilir</string>
+    <string name="room_password_hint">Şifre (ops.)</string>
+    <string name="room_max_members">Maks. uye</string>
+    <string name="room_schedule_btn">Planla</string>
+    <string name="room_create_btn">Oda Oluştur</string>
+    <string name="room_err_url">Geçerli bir URL girin (https://…)</string>
+    <string name="room_err_create_failed">Oda oluşturulamadı. Bağlantınızı kontrol edin.</string>
+    <string name="room_pick_date">Tarih sec</string>
+    <string-array name="room_templates">
+        <item>Film Gecesi 🎬</item>
+        <item>Anime Gecesi 🌸</item>
+        <item>Dizi Maratonu 📺</item>
+        <item>Belgesel 🎞️</item>
+        <item>Spor Gecesi ⚽</item>
+        <item>Konser 🎵</item>
+    </string-array>
+
+    <!-- DM -->
+    <string name="dm_empty_title">Henüz mesaj yok</string>
+    <string name="dm_empty_sub">Bir şeyler yaz, sohbeti başlat!</string>
+    <string name="dm_input_placeholder">Mesaj yaz...</string>
+    <string name="dm_err_reaction">Tepki eklenemedi</string>
+    <string name="dm_err_session">Oturum açmanız gerekiyor</string>
+    <string name="dm_err_send">Mesaj gönderilemedi, tekrar deneyin</string>
+
+    <!-- Watch room -->
+    <string name="watch_room_default">Oda %1$s</string>
+    <string name="watch_online_count">%1$d çevrimiçi</string>
+    <string name="watch_voice_chat">Sesli Sohbet</string>
+    <string name="watch_mic">Mikrofon</string>
+    <string name="watch_leave_voice">Sesten Ayrıl</string>
+    <string name="watch_join_voice">Sesli Sohbete Katıl</string>
+    <string name="watch_unmute">Mikrofonu Aç</string>
+    <string name="watch_mute">Mikrofonu Kapat</string>
+    <string name="watch_queue">Sıra</string>
+    <string name="watch_queue_count">Sıra (%1$d)</string>
+    <string name="watch_resync">Yeniden senkronla</string>
+    <string name="watch_copy_invite">Davet linkini kopyala</string>
+    <string name="watch_share_invite">Davet linkini paylaş</string>
+    <string name="watch_invite_copied">Davet linki kopyalandı</string>
+    <string name="watch_screen_share">Ekran Paylaş</string>
+    <string name="watch_screen_stop">Paylaşımı Durdur</string>
+    <string name="watch_screen_force_stop">Paylaşımı Zorla Durdur</string>
+    <string name="watch_screen_sharing">Ekranınız paylaşılıyor</string>
+    <string name="watch_screen_viewers_see">Diğer katılımcılar ekranınızı görüyor</string>
+    <string name="watch_screen_capturing">Ekran yakalanıyor…</string>
+    <string name="watch_screen_connecting">Bağlanıyor…</string>
+    <string name="watch_screen_waiting">Ekran paylaşımı bekleniyor…</string>
+    <string name="watch_screen_webrtc">WebRTC bağlantısı kuruluyor</string>
+    <string name="watch_screen_you_share">Ekranını paylaşıyorsun</string>
+    <string name="watch_screen_share_label">Ekran paylaşımı</string>
+    <string name="watch_screen_someone_sharing">Başka biri zaten ekranını paylaşıyor</string>
+    <string name="watch_screen_stale_cleared">Kopuk ekran paylaşımı temizlendi</string>
+    <string name="watch_invite_friends">Arkadaş Davet Et</string>
+    <string name="watch_invite_empty">Arkadaş listeniz boş. Ana sayfadan arkadaş ekleyin.</string>
+    <string name="watch_already_member">Zaten üye</string>
+    <string name="watch_invited">Davet edildi ✓</string>
+    <string name="watch_chat_search_open">Sohbette Ara</string>
+    <string name="watch_chat_search_close">Aramayı Kapat</string>
+    <string name="watch_video_show">Videoyu Göster</string>
+    <string name="watch_video_hide">Videoyu Gizle</string>
+    <string name="watch_pip">Küçük pencere (PiP)</string>
+    <string name="watch_change_video">Video Değiştir</string>
+    <string name="watch_start_poll">Oylama Başlat</string>
+    <string name="watch_room_settings">Oda Ayarları</string>
+    <string name="watch_delete_room">Odayı Sil</string>
+    <string name="watch_leave_room">Odadan Ayrıl</string>
+    <string name="watch_expand">Tam ekran</string>
+    <string name="watch_collapse">Küçült</string>
+    <string name="watch_no_video">Henüz video yok</string>
+    <string name="watch_add_video">Video Ekle</string>
+    <string name="watch_waiting_host_video">Host\'un video eklemesi bekleniyor…</string>
+    <string name="watch_video_error">Video oynatılamıyor</string>
+    <string name="watch_video_hidden_audio">Video gizli — sadece ses</string>
+    <string name="watch_chat_search_ph">Sohbette ara…</string>
+    <string name="watch_chat_empty">Henüz mesaj yok.\nİlk mesajı sen gönder! 👋</string>
+    <string name="watch_chat_placeholder">Mesaj yaz...</string>
+    <string name="watch_msg_copied">Mesaj kopyalandı</string>
+    <string name="watch_poll">Oylama</string>
+    <string name="watch_poll_end">Oylamayı bitir</string>
+    <string name="watch_request_pause">⏸ Durdur iste</string>
+    <string name="watch_request_play">▶ Oynat iste</string>
+    <string name="watch_typing_one">%1$s yazıyor…</string>
+    <string name="watch_typing_many">Birkaç kişi yazıyor…</string>
+    <string name="watch_control_request">👤 %1$s filmi %2$s istiyor</string>
+    <string name="watch_control_play_verb">oynatmanı</string>
+    <string name="watch_control_pause_verb">durdurmanı</string>
+    <string name="watch_sync_drift">senkron ±%1$.1fsn</string>
+    <string name="watch_scheduled">🕐 Oda planlandı — %1$s</string>
+    <string name="watch_scheduled_wait">Başlamak için bekliyorsunuz</string>
+    <string name="watch_started">🟢 Oda başladı! İyi seyirler 🎉</string>
+    <string name="watch_settings_name">Oda adı</string>
+    <string name="watch_settings_public">Herkese açık</string>
+    <string name="watch_settings_public_hint">Keşfet\'te görünür</string>
+    <string name="watch_poll_title">Oylama Başlat</string>
+    <string name="watch_poll_question">Soru</string>
+    <string name="watch_poll_opt_a">Seçenek A</string>
+    <string name="watch_poll_opt_b">Seçenek B</string>
+    <string name="watch_poll_opt_c">Seçenek C (ops.)</string>
+    <string name="watch_poll_opt_d">Seçenek D (ops.)</string>
+    <string name="watch_screen_perm_title">Ekran Paylaşımı</string>
+    <string name="watch_screen_perm_body">Ekranınızı odadaki diğer üyelerle paylaşmak için sistem izni gerekiyor. Devam ederseniz Android size onay soracak.</string>
+    <string name="watch_grant_permission">İzin Ver</string>
+    <string name="watch_dismiss">Vazgeç</string>
+    <string name="watch_delete_confirm_body">Bu odayı ve tüm mesajları silmek istediğinize emin misiniz?</string>
+    <string name="watch_participants">Katılımcılar (%1$d)</string>
+    <string name="watch_no_participants">Şu an odada kimse görünmüyor.</string>
+    <string name="watch_voice_channel">🔊 Ses Kanalı · %1$d</string>
+    <string name="watch_speaking">Konuşuyor</string>
+    <string name="watch_listen_only">Dinleme modu</string>
+    <string name="watch_muted">Sessiz</string>
+    <string name="watch_connected">Bağlı</string>
+    <string name="watch_was_here">Az önce buradaydı</string>
+    <string name="watch_make_mod">Yetkili yap</string>
+    <string name="watch_remove_mod">Yetkiyi al</string>
+    <string name="watch_transfer_host">Oda sahibi yap</string>
+    <string name="watch_add_friend">Arkadaş Ekle</string>
+    <string name="watch_request_sent">İstek gönderildi ✓</string>
+    <string name="watch_report">Şikayet et</string>
+    <string name="watch_block">Engelle</string>
+    <string name="watch_leave_confirm_title">Odadan Ayrıl</string>
+    <string name="watch_leave_confirm_body">Bu odadan ayrılmak istediğinize emin misiniz?</string>
+    <string name="watch_leave">Ayrıl</string>
+    <string name="watch_user_reported">Kullanıcı şikayet edildi</string>
+    <string name="watch_mic_enabled">Mikrofon etkinleştirildi</string>
+    <string name="watch_mic_listen_only">Mikrofon izni yok — sadece dinleme modunda katıldınız</string>
+    <string name="watch_headphone_hint">Kulaklık takılıysa ses oraya gider; çıkarınca hoparlöre döner</string>
+    <string name="watch_voice_join_failed">Ses kanalına katılınamadı: %1$s</string>
+    <string name="watch_voice_joined">🎙️ %1$s ses kanalına katıldı</string>
+    <string name="watch_voice_left">📴 %1$s ses kanalından ayrıldı</string>
+    <string name="watch_user_left">%1$s odadan ayrıldı</string>
+    <string name="watch_user_joined">%1$s odaya katıldı</string>
+    <string name="share_err_start">Paylaşım başlatılamadı: %1$s</string>
+    <string name="share_err_offer">WebRTC offer oluşturulamadı</string>
+    <string name="share_err_webrtc_init">WebRTC başlatılamadı: %1$s</string>
+    <string name="share_err_webrtc_connect">WebRTC bağlantısı kurulamadı</string>
+    <string name="share_err_rtdb_mode">Düşük gecikmeli moda geçildi (RTDB)</string>
+    <string name="share_err_rtdb_start">RTDB paylaşımı başlatılamadı: %1$s</string>
+    <string name="share_err_capture">Ekran alınamadı: %1$s</string>
+    <string name="watch_err_send">Mesaj gönderilemedi, tekrar deneyin</string>
+    <string name="watch_deafen">Sağırlaştır</string>
+    <string name="watch_leave_voice_channel">Ses kanalından ayrıl</string>
+    <string name="watch_self">Sen</string>
+    <string name="watch_voice_channel_title">Ses Kanalı · %1$d kişi</string>
+    <string name="watch_mic_level">Mikrofon seviyesi</string>
+    <string name="watch_speak_threshold">Konuşma eşiği</string>
+    <string name="watch_mic_gain_hint">Sesin az gidiyorsa 🎙️ kaydırıcısını artırın</string>
+    <string name="watch_speaking_you">🟢 Konuşuyorsun</string>
+    <string name="watch_try_speak">Bağlı — konuşmayı dene</string>
+    <string name="watch_sensitive">Hassas</string>
+    <string name="watch_less_sensitive">Az hassas</string>
+    <string name="watch_ptt">PTT</string>
+    <string name="watch_ptt_speaking">🎙️ Konuşuyor</string>
+    <string name="watch_ptt_hold">Basılı tut</string>
+    <string name="watch_yt_err_invalid">Geçersiz video parametresi. Başka bir link deneyin.</string>
+    <string name="watch_yt_err_html5">Video HTML5 oynatıcıda açılamadı.</string>
+    <string name="watch_yt_err_not_found">Video bulunamadı veya kaldırılmış.</string>
+    <string name="watch_yt_err_embed">Bu video gömülü oynatıcıda izlenemiyor. Sahibi harici sitelerde oynatmayı kapatmış — YouTube\'da doğrudan açmayı veya başka video seçmeyi deneyin.</string>
+    <string name="watch_yt_err_generic">Video oynatılamadı (hata %1$d). Başka bir video deneyin.</string>
+    <string name="watch_listening">Dinliyor</string>
+    <string name="watch_unmute_audio">Sesi aç</string>
+    <string name="watch_lower_audio">Sesi kıs</string>
+
+    <!-- Video picker -->
+    <string name="video_add_content">İçerik Ekle</string>
+    <string name="video_search_yt">YouTube\'da Ara</string>
+    <string name="video_enter_link">Link Gir</string>
+    <string name="video_search_ph">Film, dizi, video ara…</string>
+    <string name="video_search_empty">YouTube\'da arama yap</string>
+    <string name="video_play_now">Oynat</string>
+    <string name="video_queue">Sıraya</string>
+    <string name="video_url_ph">https://youtube.com/watch?v=…</string>
+    <string name="video_paste_clipboard">Panodan Yapıştır</string>
+    <string name="video_play_immediate">Hemen Oynat</string>
+    <string name="video_add_queue">Sıraya Ekle</string>
+    <string name="video_queue_title">Sıra</string>
+    <string name="video_queue_title_count">Sıra (%1$d)</string>
+    <string name="video_queue_add">Ekle</string>
+    <string name="video_queue_empty">Sıra boş</string>
+    <string name="video_queue_empty_sub">Video ekle, bir önceki bitince otomatik oynar</string>
+    <string name="video_platform_direct">Direkt Video</string>
+    <string name="video_platform_web">Web Sitesi</string>
+
+    <!-- Notifications -->
+    <string name="notif_channel_friend">Arkadaşlık</string>
+    <string name="notif_channel_friend_desc">Arkadaşlık ve oda davetleri</string>
+    <string name="notif_channel_dm">Mesajlar</string>
+    <string name="notif_channel_dm_desc">Özel mesaj bildirimleri</string>
+    <string name="notif_channel_room">Oda sohbeti</string>
+    <string name="notif_channel_room_desc">Oda mesaj bildirimleri</string>
+    <string name="notif_channel_general">Genel</string>
+    <string name="notif_friend_request">Yeni arkadaşlık isteği</string>
+    <string name="notif_friend_request_body">%1$s seni arkadaş olarak eklemek istiyor</string>
+    <string name="notif_room_invite">Oda daveti</string>
+    <string name="notif_room_invite_body">%1$s seni bir odaya davet etti</string>
+    <string name="notif_room_default">Oda</string>
+    <string name="notif_new_message">Yeni mesaj</string>
+    <string name="notif_new_messages">Yeni mesajlar</string>
+    <string name="notif_tap_messages">Mesajlarınızı görmek için dokunun</string>
+    <string name="notif_screen_share">WatchToFriend ekranı paylaşıyor</string>
+    <string name="notif_screen_share_channel">Ekran Paylaşımı</string>
+    <string name="notif_screen_share_active">Ekran paylaşımı aktif</string>
+</resources>
