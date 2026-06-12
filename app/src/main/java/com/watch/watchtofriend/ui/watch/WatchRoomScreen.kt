@@ -926,7 +926,7 @@ fun WatchRoomScreen(
                                 },
                                 onClick = {
                                     showMenu = false
-                                    context.copyToClipboard(InviteLink.buildShareMessage(room?.title, roomId))
+                                    context.copyToClipboard(InviteLink.buildCopyText(roomId))
                                     android.widget.Toast.makeText(context, context.getString(R.string.watch_invite_copied), android.widget.Toast.LENGTH_SHORT).show()
                                 }
                             )
