@@ -3,7 +3,7 @@
 Arkadaşlarınızla birlikte video izlemenizi sağlayan **Android** uygulaması. Windows masaüstü sürümü ayrı repodadır.
 
 🌐 **Web sitesi:** [watchtofriend.web.app](https://watchtofriend.web.app)  
-💻 **Desktop sürümü:** [WatchToFriendDesktop](../WatchToFriendDesktop) (ayrı repo)
+💻 **Desktop sürümü:** [WatchToFriendDesktop](https://github.com/yigit/WatchToFriendDesktop)
 
 ## Özellikler
 
@@ -24,7 +24,7 @@ Arkadaşlarınızla birlikte video izlemenizi sağlayan **Android** uygulaması.
 1. Repoyu klonlayın:
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/WatchToFriend.git
+git clone https://github.com/yigit/WatchToFriend.git
 cd WatchToFriend
 ```
 
