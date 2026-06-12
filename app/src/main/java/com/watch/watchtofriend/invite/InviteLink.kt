@@ -13,7 +13,7 @@ object InviteLink {
     private val CODE_CHARS = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"
 
     fun buildLink(roomId: String): String {
-        val code = roomId.uppercase().trim()
+        val code = normalizeCode(roomId) ?: roomId.uppercase().trim()
         return "$WEB_BASE/join/$code"
     }
 
@@ -79,7 +79,7 @@ object InviteLink {
     fun normalizeCode(raw: String): String? {
         val code = raw.uppercase().trim()
         if (code.length != 6) return null
-        if (!code.all { it in CODE_CHARS }) return null
+        if (!code.all { it.isLetterOrDigit() }) return null
         return code
     }
 
