@@ -50,6 +50,8 @@ import com.watch.watchtofriend.invite.InviteLinkRouter
 import com.watch.watchtofriend.notifications.NotificationHelper
 import com.watch.watchtofriend.notifications.NotificationRouter
 import com.watch.watchtofriend.ui.locale.LocaleHelper
+import com.google.firebase.auth.FirebaseAuth
+import androidx.compose.runtime.DisposableEffect
 
 class MainActivity : ComponentActivity() {
 
@@ -129,6 +131,19 @@ class MainActivity : ComponentActivity() {
                 val notifBump by notifTrigger
                 var homeInitialTab by remember { mutableIntStateOf(NotificationRouter.consumeHomeTab() ?: 0) }
                 val isOnline by com.watch.watchtofriend.ui.components.rememberIsOnline()
+
+                DisposableEffect(navController) {
+                    val listener = FirebaseAuth.AuthStateListener { auth ->
+                        if (auth.currentUser != null) return@AuthStateListener
+                        val route = navController.currentDestination?.route ?: return@AuthStateListener
+                        if (route == Screen.Login.route || route == Screen.Splash.route) return@AuthStateListener
+                        navController.navigate(Screen.Login.route) {
+                            popUpTo(0) { inclusive = true }
+                        }
+                    }
+                    FirebaseAuth.getInstance().addAuthStateListener(listener)
+                    onDispose { FirebaseAuth.getInstance().removeAuthStateListener(listener) }
+                }
 
                 LaunchedEffect(notifBump, authViewModel.isLoggedIn) {
                     if (!authViewModel.isLoggedIn) return@LaunchedEffect
@@ -217,6 +232,8 @@ class MainActivity : ComponentActivity() {
                 ) {
                     composable(Screen.Splash.route) {
                         SplashScreen(
+                            isLoggedIn = authViewModel.isLoggedIn,
+                            onSessionInvalid = { authViewModel.logout() },
                             onFinished = {
                                 val dest = if (authViewModel.isLoggedIn) {
                                     val code = InviteLinkRouter.takePendingCode()

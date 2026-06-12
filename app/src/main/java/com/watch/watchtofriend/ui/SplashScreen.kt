@@ -23,11 +23,16 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.watch.watchtofriend.R
+import com.watch.watchtofriend.data.repository.AuthRepository
 import com.watch.watchtofriend.ui.components.BrandLogoHero
 import kotlinx.coroutines.delay
 
 @Composable
-fun SplashScreen(onFinished: () -> Unit) {
+fun SplashScreen(
+    isLoggedIn: Boolean,
+    onSessionInvalid: () -> Unit,
+    onFinished: () -> Unit
+) {
     val scale = remember { Animatable(0.7f) }
     val alpha = remember { Animatable(0f) }
 
@@ -35,6 +40,14 @@ fun SplashScreen(onFinished: () -> Unit) {
         alpha.animateTo(1f, tween(500, easing = FastOutSlowInEasing))
         scale.animateTo(1f, tween(700, easing = FastOutSlowInEasing))
         delay(900)
+        if (isLoggedIn) {
+            val authRepo = AuthRepository()
+            if (!authRepo.ensureAuthTokenFresh()) {
+                onSessionInvalid()
+            } else {
+                authRepo.ensureCurrentUserDocument()
+            }
+        }
         onFinished()
     }
 

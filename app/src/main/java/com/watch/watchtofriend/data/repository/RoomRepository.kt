@@ -11,6 +11,7 @@ import com.watch.watchtofriend.data.model.Message
 import com.watch.watchtofriend.data.model.QueueItem
 import com.watch.watchtofriend.data.model.Request
 import com.watch.watchtofriend.data.model.Room
+import com.watch.watchtofriend.data.FirestoreAuth
 import com.watch.watchtofriend.data.model.User
 import com.watch.watchtofriend.data.model.WatchHistory
 import kotlinx.coroutines.channels.awaitClose
@@ -352,6 +353,23 @@ class RoomRepository {
             .update("friendIds", FieldValue.arrayRemove(friendUid)).await()
         db.collection("users").document(friendUid)
             .update("friendIds", FieldValue.arrayRemove(myUid)).await()
+        deleteDmConversation(myUid, friendUid)
+    }
+
+    private suspend fun deleteDmConversation(uid1: String, uid2: String) {
+        if (uid1.isBlank() || uid2.isBlank() || uid1 == uid2) return
+        runCatching {
+            val id = dmId(uid1, uid2)
+            val messages = db.collection("dms").document(id).collection("messages").get().await()
+            if (messages.documents.isNotEmpty()) {
+                for (chunk in messages.documents.chunked(400)) {
+                    val batch = db.batch()
+                    chunk.forEach { batch.delete(it.reference) }
+                    batch.commit().await()
+                }
+            }
+            db.collection("dms").document(id).delete().await()
+        }
     }
 
     suspend fun sendMessage(roomId: String, message: Message) {
@@ -434,7 +452,12 @@ class RoomRepository {
     fun observePublicRooms(): Flow<List<Room>> = callbackFlow {
         val reg: ListenerRegistration = db.collection("rooms")
             .whereEqualTo("discoverable", true)
-            .addSnapshotListener { snap, _ ->
+            .addSnapshotListener { snap, err ->
+                if (err != null) {
+                    FirestoreAuth.handleListenerError(err)
+                    trySend(emptyList())
+                    return@addSnapshotListener
+                }
                 val list = snap?.documents?.mapNotNull { it.toObject(Room::class.java) }
                     ?.sortedByDescending { it.updatedAt } ?: emptyList()
                 trySend(list)
@@ -443,9 +466,15 @@ class RoomRepository {
     }
 
     fun observeMyRooms(uid: String): Flow<List<Room>> = callbackFlow {
+        if (uid.isBlank()) { trySend(emptyList()); close(); return@callbackFlow }
         val reg: ListenerRegistration = db.collection("rooms")
             .whereArrayContains("memberUids", uid)
-            .addSnapshotListener { snap, _ ->
+            .addSnapshotListener { snap, err ->
+                if (err != null) {
+                    FirestoreAuth.handleListenerError(err)
+                    trySend(emptyList())
+                    return@addSnapshotListener
+                }
                 val rooms = snap?.documents?.mapNotNull { it.toObject(Room::class.java) } ?: emptyList()
                 trySend(rooms)
             }
@@ -538,7 +567,7 @@ class RoomRepository {
             .whereEqualTo("toUid", uid)
             .addSnapshotListener { snap, err ->
                 if (err != null) {
-                    // İzin hatası vb. -> çökmeyi önle, boş liste gönder
+                    FirestoreAuth.handleListenerError(err)
                     trySend(emptyList())
                     return@addSnapshotListener
                 }
@@ -614,7 +643,9 @@ class RoomRepository {
 
     suspend fun getUser(uid: String): User? {
         if (uid.isBlank()) return null
-        return db.collection("users").document(uid).get().await().toObject(User::class.java)
+        val snap = db.collection("users").document(uid).get().await()
+        if (!snap.exists()) return null
+        return snap.toObject(User::class.java)?.copy(uid = uid)
     }
 
     suspend fun saveFcmToken(uid: String, token: String) {
@@ -638,32 +669,45 @@ class RoomRepository {
 
     fun observeFriends(myUid: String): Flow<List<User>> = callbackFlow {
         if (myUid.isBlank()) { trySend(emptyList()); close(); return@callbackFlow }
-        // Arkadaş dokümanlarını CANLI dinle (lastActive/çevrimiçi anlık güncellensin).
         val friendRegs = mutableListOf<ListenerRegistration>()
-        val chunkResults = HashMap<Int, List<User>>()
-        var lastIds: List<String>? = null
+        val friendMap = linkedMapOf<String, User>()
+
+        fun emitFriends() {
+            trySend(friendMap.values.toList())
+        }
+
         val myReg: ListenerRegistration = db.collection("users").document(myUid)
-            .addSnapshotListener { snap, _ ->
+            .addSnapshotListener { snap, err ->
+                if (err != null) {
+                    FirestoreAuth.handleListenerError(err)
+                    trySend(emptyList())
+                    return@addSnapshotListener
+                }
                 val ids = snap?.toObject(User::class.java)?.friendIds ?: emptyList()
-                // Arkadaş LİSTESİ değişmediyse mevcut dinleyiciler geçerli — yeniden kurma.
-                // (Kendi dokümanımdaki lastActive/clockProbe değişimlerinde gereksiz yeniden
-                //  kurulmayı önler.)
-                if (ids == lastIds) return@addSnapshotListener
-                lastIds = ids
-                // Eski arkadaş dinleyicilerini kapat
                 friendRegs.forEach { it.remove() }
                 friendRegs.clear()
-                chunkResults.clear()
+                friendMap.clear()
                 if (ids.isEmpty()) {
                     trySend(emptyList())
                     return@addSnapshotListener
                 }
-                // whereIn en fazla 10 değer → 10'luk parçalara böl, her parçayı canlı dinle
-                ids.chunked(10).forEachIndexed { idx, chunk ->
-                    val r = db.collection("users").whereIn("uid", chunk)
-                        .addSnapshotListener { s, _ ->
-                            chunkResults[idx] = s?.documents?.mapNotNull { it.toObject(User::class.java) } ?: emptyList()
-                            trySend(chunkResults.values.flatten())
+                ids.forEach { friendUid ->
+                    val r = db.collection("users").document(friendUid)
+                        .addSnapshotListener { s, e ->
+                            if (e != null) {
+                                FirestoreAuth.handleListenerError(e)
+                                return@addSnapshotListener
+                            }
+                            if (s != null && s.exists()) {
+                                val u = s.toObject(User::class.java)?.copy(uid = friendUid)
+                                if (u != null) {
+                                    friendMap[friendUid] = u
+                                    emitFriends()
+                                }
+                            } else {
+                                friendMap.remove(friendUid)
+                                emitFriends()
+                            }
                         }
                     friendRegs.add(r)
                 }
@@ -792,7 +836,12 @@ class RoomRepository {
         if (uid.isBlank()) { trySend(emptyList()); close(); return@callbackFlow }
         val reg: ListenerRegistration = db.collection("dms")
             .whereArrayContains("participantUids", uid)
-            .addSnapshotListener { snap, _ ->
+            .addSnapshotListener { snap, err ->
+                if (err != null) {
+                    FirestoreAuth.handleListenerError(err)
+                    trySend(emptyList())
+                    return@addSnapshotListener
+                }
                 val list = snap?.documents?.mapNotNull { doc ->
                     doc.toObject(DmConversation::class.java)?.let { conv ->
                         conv.copy(id = doc.id.ifBlank { conv.id })
@@ -886,7 +935,12 @@ class RoomRepository {
         val reg: ListenerRegistration = db.collection("users").document(uid).collection("history")
             .orderBy("watchedAt", Query.Direction.DESCENDING)
             .limit(50)
-            .addSnapshotListener { snap, _ ->
+            .addSnapshotListener { snap, err ->
+                if (err != null) {
+                    FirestoreAuth.handleListenerError(err)
+                    trySend(emptyList())
+                    return@addSnapshotListener
+                }
                 val list = snap?.documents?.mapNotNull { it.toObject(WatchHistory::class.java) } ?: emptyList()
                 trySend(list)
             }

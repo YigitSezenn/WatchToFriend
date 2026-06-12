@@ -60,7 +60,10 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.watch.watchtofriend.ui.components.rememberPhoto
 import java.io.ByteArrayOutputStream
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
+import com.watch.watchtofriend.data.repository.AuthRepository
 import com.watch.watchtofriend.data.model.Request
 import com.watch.watchtofriend.data.model.resolvedId
 import com.watch.watchtofriend.ui.admin.ADMIN_EMAIL
@@ -103,6 +106,8 @@ fun HomeScreen(
     var searchEmail by remember { mutableStateOf("") }
     var roomToDelete by remember { mutableStateOf<Room?>(null) }
     var showProfile by remember { mutableStateOf(false) }
+    var showDeleteAccount by remember { mutableStateOf(false) }
+    var deletePassword by remember { mutableStateOf("") }
     var showHelp by remember { mutableStateOf(false) }
     val context = LocalContext.current
     var showTour by remember { mutableStateOf(!TourPrefs.isDone(context)) }
@@ -124,6 +129,14 @@ fun HomeScreen(
         }
     }
 
+    LaunchedEffect(vm) {
+        vm.accountDeleted.collect {
+            showDeleteAccount = false
+            showProfile = false
+            onLogout()
+        }
+    }
+
     val photoPicker = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
@@ -131,6 +144,26 @@ fun HomeScreen(
             val b64 = encodeImageToBase64(context, uri)
             if (b64 != null) vm.updatePhoto(b64)
             else android.widget.Toast.makeText(context, context.getString(R.string.home_photo_too_large), android.widget.Toast.LENGTH_LONG).show()
+        }
+    }
+
+    val authRepo = remember { AuthRepository() }
+    val isGoogleAccount = remember { authRepo.isGoogleAccount() }
+    val googleDeleteLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            try {
+                val account = GoogleSignIn.getSignedInAccountFromIntent(result.data).getResult(ApiException::class.java)
+                val token = account?.idToken
+                if (token != null) {
+                    vm.deleteAccountWithGoogle(token)
+                } else {
+                    android.widget.Toast.makeText(context, context.getString(R.string.profile_delete_failed), android.widget.Toast.LENGTH_SHORT).show()
+                }
+            } catch (_: Exception) {
+                android.widget.Toast.makeText(context, context.getString(R.string.profile_delete_failed), android.widget.Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
@@ -386,6 +419,9 @@ fun HomeScreen(
     // Profil ekranı (avatar, ad, ID)
     if (showProfile) {
         var editName by remember(myProfile?.displayName) { mutableStateOf(myProfile?.displayName ?: "") }
+        var pwdCurrent by remember { mutableStateOf("") }
+        var pwdNew by remember { mutableStateOf("") }
+        var pwdConfirm by remember { mutableStateOf("") }
         AlertDialog(
             onDismissRequest = { if (!isRemovingPhoto) showProfile = false },
             title = { Text(stringResource(R.string.profile_title)) },
@@ -588,6 +624,53 @@ fun HomeScreen(
                             )
                         }
                     }
+                    if (!isGoogleAccount) {
+                        Spacer(Modifier.height(14.dp))
+                        Text(
+                            stringResource(R.string.profile_change_password),
+                            style = MaterialTheme.typography.labelMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                        Spacer(Modifier.height(6.dp))
+                        OutlinedTextField(
+                            value = pwdCurrent,
+                            onValueChange = { pwdCurrent = it },
+                            label = { Text(stringResource(R.string.profile_current_password)) },
+                            singleLine = true,
+                            visualTransformation = androidx.compose.ui.text.input.PasswordVisualTransformation(),
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                        Spacer(Modifier.height(8.dp))
+                        OutlinedTextField(
+                            value = pwdNew,
+                            onValueChange = { pwdNew = it },
+                            label = { Text(stringResource(R.string.profile_new_password)) },
+                            singleLine = true,
+                            visualTransformation = androidx.compose.ui.text.input.PasswordVisualTransformation(),
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                        Spacer(Modifier.height(8.dp))
+                        OutlinedTextField(
+                            value = pwdConfirm,
+                            onValueChange = { pwdConfirm = it },
+                            label = { Text(stringResource(R.string.profile_new_password_confirm)) },
+                            singleLine = true,
+                            visualTransformation = androidx.compose.ui.text.input.PasswordVisualTransformation(),
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                        Spacer(Modifier.height(8.dp))
+                        Button(
+                            onClick = {
+                                vm.changePassword(pwdCurrent, pwdNew, pwdConfirm)
+                                pwdCurrent = ""
+                                pwdNew = ""
+                                pwdConfirm = ""
+                            },
+                            enabled = pwdCurrent.isNotBlank() && pwdNew.isNotBlank() && pwdConfirm.isNotBlank(),
+                            modifier = Modifier.fillMaxWidth()
+                        ) { Text(stringResource(R.string.profile_change_password)) }
+                    }
                     Spacer(Modifier.height(8.dp))
                     TextButton(
                         onClick = {
@@ -609,6 +692,19 @@ fun HomeScreen(
                         },
                         modifier = Modifier.fillMaxWidth()
                     ) { Text(stringResource(R.string.profile_rate)) }
+                    Spacer(Modifier.height(8.dp))
+                    TextButton(
+                        onClick = {
+                            deletePassword = ""
+                            showDeleteAccount = true
+                        },
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text(
+                            stringResource(R.string.profile_delete_account),
+                            color = MaterialTheme.colorScheme.error
+                        )
+                    }
                     // İzleme Geçmişi
                     if (watchHistory.isNotEmpty()) {
                         Spacer(Modifier.height(16.dp))
@@ -766,6 +862,55 @@ fun HomeScreen(
                     onClick = { showProfile = false },
                     enabled = !isRemovingPhoto
                 ) { Text(stringResource(R.string.profile_close)) }
+            }
+        )
+    }
+
+    if (showDeleteAccount) {
+        AlertDialog(
+            onDismissRequest = { showDeleteAccount = false },
+            icon = { Icon(Icons.Default.Delete, contentDescription = null, tint = MaterialTheme.colorScheme.error) },
+            title = { Text(stringResource(R.string.profile_delete_title)) },
+            text = {
+                Column {
+                    Text(stringResource(R.string.profile_delete_body))
+                    Spacer(Modifier.height(12.dp))
+                    if (isGoogleAccount) {
+                        Button(
+                            onClick = {
+                                googleDeleteLauncher.launch(authRepo.getGoogleSignInIntent(context))
+                            },
+                            modifier = Modifier.fillMaxWidth()
+                        ) { Text(stringResource(R.string.profile_delete_google)) }
+                    } else {
+                        OutlinedTextField(
+                            value = deletePassword,
+                            onValueChange = { deletePassword = it },
+                            label = { Text(stringResource(R.string.profile_delete_password)) },
+                            singleLine = true,
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                    }
+                }
+            },
+            confirmButton = {
+                if (!isGoogleAccount) {
+                    TextButton(
+                        onClick = {
+                            if (deletePassword.isNotBlank()) {
+                                vm.deleteAccountWithPassword(deletePassword)
+                            }
+                        },
+                        enabled = deletePassword.isNotBlank()
+                    ) {
+                        Text(stringResource(R.string.profile_delete_confirm), color = MaterialTheme.colorScheme.error)
+                    }
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showDeleteAccount = false }) {
+                    Text(stringResource(R.string.common_cancel))
+                }
             }
         )
     }

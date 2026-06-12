@@ -30,7 +30,7 @@ service cloud.firestore {
       allow create: if isOwn(userId);
       allow update: if isOwn(userId) ||
         (isAuth() && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['friendIds']));
-      allow delete: if false;
+      allow delete: if isOwn(userId);
 
       match /history/{entryId} {
         allow read, write: if isOwn(userId);
@@ -108,7 +108,8 @@ service cloud.firestore {
 
       allow update: if isAuth() && uid() in resource.data.participantUids;
 
-      allow delete: if false;
+      // Katılımcılar arkadaş silince konuşmayı tamamen kaldırabilir
+      allow delete: if isAuth() && uid() in resource.data.participantUids;
 
       match /messages/{msgId} {
         allow read: if isAuth() && (

@@ -42,6 +42,9 @@ class HomeViewModel @JvmOverloads constructor(
     private val _toast = MutableSharedFlow<String>(extraBufferCapacity = 4)
     val toast: SharedFlow<String> = _toast
 
+    private val _accountDeleted = MutableSharedFlow<Unit>(extraBufferCapacity = 1)
+    val accountDeleted: SharedFlow<Unit> = _accountDeleted
+
     // Senaryo 2: Çift tıklama koruması — istek işlemleri için kilit
     private val requestMutex = Mutex()
 
@@ -388,6 +391,56 @@ class HomeViewModel @JvmOverloads constructor(
                 repo.removeFriend(uid, friendUid)
             } catch (_: Exception) {
                 _toast.tryEmit(getApplication<Application>().getString(R.string.toast_remove_friend_failed))
+            }
+        }
+    }
+
+    private val authRepo = AuthRepository()
+
+    fun isGoogleAccount(): Boolean = authRepo.isGoogleAccount()
+
+    fun deleteAccountWithPassword(password: String) {
+        viewModelScope.launch {
+            try {
+                val email = FirebaseAuth.getInstance().currentUser?.email ?: return@launch
+                authRepo.reauthenticateWithPassword(email, password)
+                val friendIds = _myProfile.value?.friendIds ?: emptyList()
+                authRepo.deleteAccount(friendIds)
+                _accountDeleted.tryEmit(Unit)
+            } catch (_: Exception) {
+                _toast.tryEmit(getApplication<Application>().getString(R.string.profile_delete_failed))
+            }
+        }
+    }
+
+    fun deleteAccountWithGoogle(idToken: String) {
+        viewModelScope.launch {
+            try {
+                authRepo.reauthenticateWithGoogle(idToken)
+                val friendIds = _myProfile.value?.friendIds ?: emptyList()
+                authRepo.deleteAccount(friendIds)
+                _accountDeleted.tryEmit(Unit)
+            } catch (_: Exception) {
+                _toast.tryEmit(getApplication<Application>().getString(R.string.profile_delete_failed))
+            }
+        }
+    }
+
+    fun changePassword(currentPassword: String, newPassword: String, confirmPassword: String) {
+        viewModelScope.launch {
+            if (newPassword != confirmPassword) {
+                _toast.tryEmit(getApplication<Application>().getString(R.string.profile_password_mismatch))
+                return@launch
+            }
+            if (newPassword.length < 6) {
+                _toast.tryEmit(getApplication<Application>().getString(R.string.profile_password_min))
+                return@launch
+            }
+            try {
+                authRepo.changePassword(currentPassword, newPassword)
+                _toast.tryEmit(getApplication<Application>().getString(R.string.profile_password_updated))
+            } catch (_: Exception) {
+                _toast.tryEmit(getApplication<Application>().getString(R.string.profile_password_failed))
             }
         }
     }

@@ -47,6 +47,21 @@
     <string name="profile_unblock">Unblock</string>
     <string name="profile_save">Save</string>
     <string name="profile_close">Close</string>
+    <string name="profile_delete_account">Delete account</string>
+    <string name="profile_delete_title">Permanently delete account</string>
+    <string name="profile_delete_body">Your friends, messages, rooms, and profile will be permanently deleted. This cannot be undone.</string>
+    <string name="profile_delete_password">Enter your password</string>
+    <string name="profile_delete_confirm">Delete my account</string>
+    <string name="profile_delete_google">Verify with Google</string>
+    <string name="profile_delete_failed">Could not delete account. Try again.</string>
+    <string name="profile_change_password">Change password</string>
+    <string name="profile_current_password">Current password</string>
+    <string name="profile_new_password">New password</string>
+    <string name="profile_new_password_confirm">Confirm new password</string>
+    <string name="profile_password_updated">Password updated.</string>
+    <string name="profile_password_failed">Could not update password. Check your current password.</string>
+    <string name="profile_password_mismatch">New passwords do not match.</string>
+    <string name="profile_password_min">New password must be at least 6 characters.</string>
     <string name="profile_wait">Please wait…</string>
 
     <string name="tour_skip">Skip</string>
@@ -255,6 +270,8 @@
     <string name="watch_mic">Microphone</string>
     <string name="watch_leave_voice">Leave voice</string>
     <string name="watch_join_voice">Join voice chat</string>
+    <string name="watch_voice_connecting">Connecting to voice channel…</string>
+    <string name="common_connecting">Connecting…</string>
     <string name="watch_unmute">Unmute</string>
     <string name="watch_mute">Mute</string>
     <string name="watch_queue">Queue</string>
@@ -339,6 +356,8 @@
     <string name="watch_make_mod">Make moderator</string>
     <string name="watch_remove_mod">Remove moderator</string>
     <string name="watch_transfer_host">Transfer host</string>
+    <string name="watch_transfer_host_title">Transfer host role</string>
+    <string name="watch_transfer_host_body">%1$s will become the room host. Video control will move to them.</string>
     <string name="watch_add_friend">Add friend</string>
     <string name="watch_request_sent">Request sent ✓</string>
     <string name="watch_report">Report</string>

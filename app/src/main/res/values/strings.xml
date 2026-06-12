@@ -51,6 +51,21 @@
     <string name="profile_unblock">Engeli Kaldır</string>
     <string name="profile_save">Kaydet</string>
     <string name="profile_close">Kapat</string>
+    <string name="profile_delete_account">Hesabı Sil</string>
+    <string name="profile_delete_title">Hesabı kalıcı olarak sil</string>
+    <string name="profile_delete_body">Arkadaşlıkların, mesajların, odaların ve profilin tamamen silinir. Bu işlem geri alınamaz.</string>
+    <string name="profile_delete_password">Şifreni gir</string>
+    <string name="profile_delete_confirm">Hesabımı sil</string>
+    <string name="profile_delete_google">Google ile doğrula</string>
+    <string name="profile_delete_failed">Hesap silinemedi. Tekrar dene.</string>
+    <string name="profile_change_password">Şifre Değiştir</string>
+    <string name="profile_current_password">Mevcut şifre</string>
+    <string name="profile_new_password">Yeni şifre</string>
+    <string name="profile_new_password_confirm">Yeni şifre (tekrar)</string>
+    <string name="profile_password_updated">Şifre güncellendi.</string>
+    <string name="profile_password_failed">Şifre güncellenemedi. Mevcut şifreni kontrol et.</string>
+    <string name="profile_password_mismatch">Yeni şifreler eşleşmiyor.</string>
+    <string name="profile_password_min">Yeni şifre en az 6 karakter olmalı.</string>
     <string name="profile_wait">Lütfen bekleyin…</string>
 
     <!-- Tour -->
@@ -271,6 +286,8 @@
     <string name="watch_mic">Mikrofon</string>
     <string name="watch_leave_voice">Sesten Ayrıl</string>
     <string name="watch_join_voice">Sesli Sohbete Katıl</string>
+    <string name="watch_voice_connecting">Ses kanalına bağlanıyor…</string>
+    <string name="common_connecting">Bağlanıyor…</string>
     <string name="watch_unmute">Mikrofonu Aç</string>
     <string name="watch_mute">Mikrofonu Kapat</string>
     <string name="watch_queue">Sıra</string>
@@ -355,6 +372,8 @@
     <string name="watch_make_mod">Yetkili yap</string>
     <string name="watch_remove_mod">Yetkiyi al</string>
     <string name="watch_transfer_host">Oda sahibi yap</string>
+    <string name="watch_transfer_host_title">Oda sahibi devri</string>
+    <string name="watch_transfer_host_body">%1$s oda sahibi olacak. Video kontrolü ona geçer.</string>
     <string name="watch_add_friend">Arkadaş Ekle</string>
     <string name="watch_request_sent">İstek gönderildi ✓</string>
     <string name="watch_report">Şikayet et</string>

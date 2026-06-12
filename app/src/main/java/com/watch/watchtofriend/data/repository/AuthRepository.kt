@@ -5,11 +5,13 @@ import android.content.Intent
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.firestore.FirebaseFirestore
 import com.watch.watchtofriend.R
+import com.watch.watchtofriend.data.FirestoreAuth
 import com.watch.watchtofriend.data.model.User
 import kotlinx.coroutines.tasks.await
 
@@ -65,6 +67,9 @@ class AuthRepository {
         auth.currentUser?.let { ensureUserDocument(it) }
     }
 
+    /** Oturum açıkken token yenile; başarısızsa false (silinmiş hesap vb.). */
+    suspend fun ensureAuthTokenFresh(): Boolean = FirestoreAuth.ensureReady()
+
     /** E-posta ile giriş yapan ama Firestore kaydı silinmiş/eski hesaplar için. */
     private suspend fun ensureUserDocument(user: FirebaseUser) {
         val ref = db.collection("users").document(user.uid)
@@ -93,4 +98,31 @@ class AuthRepository {
     }
 
     fun logout() = auth.signOut()
+
+    fun isGoogleAccount(): Boolean =
+        auth.currentUser?.providerData?.any { it.providerId == GoogleAuthProvider.PROVIDER_ID } == true
+
+    suspend fun reauthenticateWithPassword(email: String, password: String) {
+        val user = auth.currentUser ?: error("No user")
+        user.reauthenticate(EmailAuthProvider.getCredential(email, password)).await()
+    }
+
+    suspend fun reauthenticateWithGoogle(idToken: String) {
+        val user = auth.currentUser ?: error("No user")
+        user.reauthenticate(GoogleAuthProvider.getCredential(idToken, null)).await()
+    }
+
+    suspend fun changePassword(currentPassword: String, newPassword: String) {
+        val user = auth.currentUser ?: error("No user")
+        val email = user.email ?: error("No email")
+        if (newPassword.length < 6) error("weak")
+        user.reauthenticate(EmailAuthProvider.getCredential(email, currentPassword)).await()
+        user.updatePassword(newPassword).await()
+    }
+
+    suspend fun deleteAccount(friendIds: List<String>) {
+        val user = auth.currentUser ?: error("No user")
+        AccountDeletion.purgeUserData(user.uid, friendIds)
+        user.delete().await()
+    }
 }

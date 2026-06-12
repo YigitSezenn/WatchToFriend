@@ -12,6 +12,7 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.core.animateFloatAsState
@@ -197,6 +198,7 @@ fun WatchRoomScreen(
         onDispose { voiceManager.destroy() }
     }
     val isInVoice       by voiceManager.inVoice.collectAsState()
+    val isVoiceJoining  by voiceManager.isJoining.collectAsState()
 
     // Sesli sohbet açılınca/kapanınca ekran sesi yönlendirmesini güncelle (kesik ses / düşük ses fix)
     var voiceAudioTipShown by remember { mutableStateOf(false) }
@@ -313,6 +315,7 @@ fun WatchRoomScreen(
     }
 
     fun requestMicAndJoinVoice() {
+        if (isVoiceJoining || isInVoice) return
         val hasPermission = androidx.core.content.ContextCompat.checkSelfPermission(
             context,
             android.Manifest.permission.RECORD_AUDIO
@@ -399,6 +402,11 @@ fun WatchRoomScreen(
     fun showTopBarBriefly() {
         if (!expandVideo) return
         topBarShowTrigger++
+    }
+
+    BackHandler(enabled = expandVideo) {
+        expandVideo = false
+        topBarVisible = true
     }
 
     DisposableEffect(immersive) {
@@ -716,6 +724,7 @@ fun WatchRoomScreen(
         else -> MaterialTheme.colorScheme.error
     }
 
+    Box(modifier = Modifier.fillMaxSize()) {
     Scaffold(
         contentWindowInsets = WindowInsets.safeDrawing,
         topBar = {
@@ -801,6 +810,7 @@ fun WatchRoomScreen(
                     val iAmSpeaking = speakingUids.contains(vm.uid) || localMicLevel > 0.07f
                     IconButton(
                         onClick = { if (isInVoice) voiceManager.toggleMute() else requestMicAndJoinVoice() },
+                        enabled = !isVoiceJoining,
                         modifier = Modifier.then(
                             when {
                                 iAmSpeaking -> Modifier.border(
@@ -818,11 +828,14 @@ fun WatchRoomScreen(
                         )
                     ) {
                         Icon(
-                            if (isVoiceMuted) Icons.Default.MicOff
+                            if (isVoiceJoining) Icons.Default.Mic
+                            else if (isVoiceMuted) Icons.Default.MicOff
                             else if (isInVoice) Icons.Default.Mic
                             else Icons.Default.Mic,
-                            contentDescription = if (isInVoice) stringResource(R.string.watch_mic) else stringResource(R.string.watch_voice_chat),
+                            contentDescription = if (isVoiceJoining) stringResource(R.string.common_connecting)
+                            else if (isInVoice) stringResource(R.string.watch_mic) else stringResource(R.string.watch_voice_chat),
                             tint = when {
+                                isVoiceJoining  -> MaterialTheme.colorScheme.primary.copy(alpha = 0.5f)
                                 !isInVoice      -> MaterialTheme.colorScheme.onSurfaceVariant
                                 isVoiceMuted    -> MaterialTheme.colorScheme.error
                                 iAmSpeaking     -> androidx.compose.ui.graphics.Color(0xFF22c55e)
@@ -1454,6 +1467,39 @@ fun WatchRoomScreen(
                         }
                     }
                 }
+                if (expandVideo) {
+                    Row(
+                        modifier = Modifier
+                            .align(Alignment.TopStart)
+                            .statusBarsPadding()
+                            .padding(8.dp)
+                            .clip(RoundedCornerShape(28.dp))
+                            .background(MaterialTheme.colorScheme.scrim.copy(alpha = 0.72f))
+                            .zIndex(40f),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        IconButton(onClick = {
+                            expandVideo = false
+                            topBarVisible = true
+                        }) {
+                            Icon(
+                                Icons.Default.FullscreenExit,
+                                contentDescription = stringResource(R.string.watch_collapse),
+                                tint = Color.White
+                            )
+                        }
+                        IconButton(onClick = {
+                            if (isInVoice) voiceManager.leave()
+                            onBack()
+                        }) {
+                            Icon(
+                                Icons.AutoMirrored.Filled.ArrowBack,
+                                contentDescription = stringResource(R.string.common_back),
+                                tint = Color.White
+                            )
+                        }
+                    }
+                }
                 }
             }
         }
@@ -1902,6 +1948,35 @@ fun WatchRoomScreen(
                 }
             }
         }
+    }
+
+    if (isVoiceJoining) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.Black.copy(alpha = 0.55f))
+                .zIndex(100f),
+            contentAlignment = Alignment.Center
+        ) {
+            Surface(
+                shape = RoundedCornerShape(16.dp),
+                color = MaterialTheme.colorScheme.surface,
+                tonalElevation = 4.dp
+            ) {
+                Column(
+                    modifier = Modifier.padding(horizontal = 28.dp, vertical = 22.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    CircularProgressIndicator()
+                    Spacer(Modifier.height(14.dp))
+                    Text(
+                        stringResource(R.string.watch_voice_connecting),
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                }
+            }
+        }
+    }
     }
 
     // Arkadaş davet dialog'u

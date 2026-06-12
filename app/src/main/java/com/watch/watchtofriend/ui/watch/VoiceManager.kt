@@ -50,6 +50,9 @@ class VoiceManager(
     private val _inVoice   = MutableStateFlow(false)
     val inVoice: StateFlow<Boolean> = _inVoice
 
+    private val _isJoining = MutableStateFlow(false)
+    val isJoining: StateFlow<Boolean> = _isJoining
+
     private val _muted = MutableStateFlow(false)
     val muted: StateFlow<Boolean> = _muted
 
@@ -878,8 +881,10 @@ class VoiceManager(
 
     // ── Sesli sohbete katıl ────────────────────────────────────────────────
     fun join(hasMicPermission: Boolean = false) {
-        if (_inVoice.value) return
+        if (_inVoice.value || _isJoining.value) return
         scope.launch {
+            _isJoining.value = true
+            _joinError.value = null
             try {
                 withContext(Dispatchers.IO) {
                     TurnConfig.init()
@@ -984,6 +989,8 @@ class VoiceManager(
                 android.util.Log.e(VOICE_TAG, "join() hatası", e)
                 releaseInternal()
                 _joinError.value = e.message ?: "Bağlantı kurulamadı"
+            } finally {
+                _isJoining.value = false
             }
         }
     }
@@ -1222,6 +1229,7 @@ class VoiceManager(
         cachedIceConfig = null
         RoomAudioRouter.setVoiceActive(context, false)
         _inVoice.value   = false
+        _isJoining.value = false
         _muted.value     = false
         _deafened.value  = false
         _pushToTalk.value = VoicePrefs.loadPushToTalk(context)
