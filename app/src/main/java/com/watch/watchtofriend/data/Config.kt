@@ -1,8 +1,9 @@
 package com.watch.watchtofriend.data
 
-// YouTube Data API v3 anahtarı.
-// GÜVENLİK: Google Cloud Console'da bu anahtarı paket adı + SHA-1 (Android kısıtlaması)
-// ve "YouTube Data API v3" servisiyle SINIRLA. Aksi halde kötüye kullanılabilir.
+import com.watch.watchtofriend.BuildConfig
+
+// YouTube Data API v3 — anahtar local.properties içinde youtube.api.key=... (git'e girmez).
+// Google Cloud Console'da Android paket adı + SHA-1 ile kısıtla.
 object Config {
-    const val YOUTUBE_API_KEY = ""
+    val YOUTUBE_API_KEY: String = BuildConfig.YOUTUBE_API_KEY
 }

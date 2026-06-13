@@ -13,6 +13,11 @@ val keystoreProps = Properties().apply {
     if (keystorePropsFile.exists()) load(FileInputStream(keystorePropsFile))
 }
 
+val localPropsFile = rootProject.file("local.properties")
+val localProps = Properties().apply {
+    if (localPropsFile.exists()) load(FileInputStream(localPropsFile))
+}
+
 android {
     namespace = "com.watch.watchtofriend"
     compileSdk = 36
@@ -23,6 +28,9 @@ android {
         targetSdk = 36
         versionCode = 11
         versionName = "1.4.0"
+
+        val youtubeApiKey = localProps.getProperty("youtube.api.key", "")
+        buildConfigField("String", "YOUTUBE_API_KEY", "\"$youtubeApiKey\"")
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -58,6 +66,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
